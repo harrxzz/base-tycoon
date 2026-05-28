@@ -6,6 +6,7 @@ import "./index.css";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { WalletModal } from "@/components/wallet-modal";
 import HomeRoute from "@/routes/home";
 import FactoryRoute from "@/routes/factory";
 import LeaderboardRoute from "@/routes/leaderboard";
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")!).render(
           </main>
           <Footer />
         </div>
+        <WalletModal />
         <Toaster theme="dark" position="bottom-right" richColors />
       </BrowserRouter>
     </Providers>

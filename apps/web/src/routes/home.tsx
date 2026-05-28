@@ -1,14 +1,58 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Zap,
+  Sparkles,
+  Layers,
+  Shield,
+  Fingerprint,
+  Wallet,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Spotlight } from "@/components/motion/spotlight";
-import { Sparkles } from "@/components/motion/sparkles";
+import { Sparkles as SparkleParticles } from "@/components/motion/sparkles";
 import { BackgroundBeams } from "@/components/motion/background-beams";
 import { STAGE_LIST } from "@/lib/stages";
+import { useWalletModal } from "@/lib/wallet-modal-store";
+import { useFirstVisitWalletPrompt } from "@/hooks/use-first-visit-wallet-prompt";
+
+const smartWalletBenefits = [
+  {
+    icon: Zap,
+    title: "Zero gas fees",
+    desc: "Every onchain action sponsored by our Paymaster. You play, we pay.",
+    accent: "text-yellow-400",
+    bg: "bg-yellow-400/10",
+  },
+  {
+    icon: Layers,
+    title: "Batch everything",
+    desc: "Claim 8 steps in a single signature. One tap, eight rewards.",
+    accent: "text-base-blue",
+    bg: "bg-base-blue/10",
+  },
+  {
+    icon: Fingerprint,
+    title: "Passkey login",
+    desc: "Face ID or Touch ID. No 12-word seed phrase to lose.",
+    accent: "text-emerald-400",
+    bg: "bg-emerald-400/10",
+  },
+  {
+    icon: Shield,
+    title: "ERC-4337 security",
+    desc: "Account abstraction with rotation, recovery, and spend limits.",
+    accent: "text-purple-400",
+    bg: "bg-purple-400/10",
+  },
+];
 
 export default function HomeRoute() {
+  const openWalletModal = useWalletModal((s) => s.open);
+  useFirstVisitWalletPrompt();
+
   return (
     <>
       {/* Hero */}
@@ -18,7 +62,7 @@ export default function HomeRoute() {
           className="-top-40 left-0 md:-top-20 md:left-60"
           fill="oklch(0.55 0.22 258)"
         />
-        <Sparkles count={50} />
+        <SparkleParticles count={50} />
 
         <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 py-24 text-center sm:py-32">
           <motion.div
@@ -49,9 +93,9 @@ export default function HomeRoute() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="mt-5 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg"
           >
-            Tap. Craft. Combine. Climb six themed industries — lumber, café,
+            Build idle factories across six themed industries — lumber, café,
             candy, crystal, mech, bonsai. Every onchain action sponsored. No
-            wallet, no signup, no friction.
+            seed phrase, no signup, no friction.
           </motion.p>
 
           <motion.div
@@ -73,6 +117,82 @@ export default function HomeRoute() {
         </div>
       </section>
 
+      {/* Smart Wallet education */}
+      <section className="relative mx-auto max-w-6xl px-4 py-16">
+        <div className="mb-10 text-center">
+          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-base-blue/40 bg-base-blue/10 px-3 py-1 text-xs font-medium text-base-blue">
+            <Sparkles className="size-3" />
+            Why Base Account
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Smart wallets, smarter gameplay.
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+            Base Tycoon runs best on Base Account — a smart contract wallet
+            that unlocks features regular EOAs can't touch. Here's why it
+            matters.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {smartWalletBenefits.map((b, i) => (
+            <motion.div
+              key={b.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+            >
+              <Card className="h-full border-border/60 bg-card/40 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-base-blue/30 hover:shadow-lg">
+                <CardContent className="flex gap-4 p-6">
+                  <div
+                    className={`grid size-11 shrink-0 place-items-center rounded-lg ${b.bg} ${b.accent}`}
+                  >
+                    <b.icon className="size-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-base font-semibold">{b.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                      {b.desc}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Comparison strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-6 grid grid-cols-1 gap-3 rounded-xl border border-border/60 bg-card/30 p-4 sm:grid-cols-3"
+        >
+          <div className="flex items-center justify-center gap-2 rounded-lg bg-base-blue/10 px-3 py-2.5 text-sm">
+            <Sparkles className="size-4 text-base-blue" />
+            <span className="font-medium text-base-blue">Base Account</span>
+            <span className="text-xs text-muted-foreground">recommended</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 px-3 py-2.5 text-sm text-muted-foreground">
+            <span>vs</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 rounded-lg bg-card/40 px-3 py-2.5 text-sm">
+            <Wallet className="size-4 text-muted-foreground" />
+            <span className="font-medium">MetaMask · Rabby · OKX</span>
+            <span className="text-xs text-muted-foreground">supported</span>
+          </div>
+        </motion.div>
+
+        <div className="mt-8 flex justify-center">
+          <Button variant="base" size="lg" onClick={openWalletModal}>
+            <Wallet />
+            Connect Wallet
+          </Button>
+        </div>
+      </section>
+
       {/* Six stages preview */}
       <section className="relative mx-auto max-w-6xl px-4 py-16">
         <div className="mb-10 text-center">
@@ -80,7 +200,7 @@ export default function HomeRoute() {
             Six industries. One empire.
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Master each stage to unlock the next. 24 resources, 4 sub-tiers per
+            Master each stage to unlock the next. 48 resources, 8 steps per
             stage.
           </p>
         </div>
@@ -138,21 +258,27 @@ export default function HomeRoute() {
       {/* CTA strip */}
       <section className="relative mx-auto max-w-6xl px-4 py-20">
         <Card className="relative overflow-hidden border-base-blue/20 bg-gradient-to-br from-base-blue/10 via-card to-card">
-          <Sparkles count={20} color="oklch(0.7 0.18 258)" />
+          <SparkleParticles count={20} color="oklch(0.7 0.18 258)" />
           <CardContent className="relative flex flex-col items-center gap-5 p-10 text-center sm:p-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Ready to climb the leaderboard?
             </h2>
             <p className="max-w-xl text-muted-foreground">
-              Connect a Coinbase Smart Wallet — passkey, no seed phrase, no
-              gas. Start tapping in under 10 seconds.
+              Connect Base Account — passkey login, no seed phrase, gas
+              sponsored. You're factory-running in under 10 seconds.
             </p>
-            <Button asChild variant="base" size="xl">
-              <Link to="/factory">
-                Start Building
-                <ArrowRight />
-              </Link>
-            </Button>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Button variant="base" size="xl" onClick={openWalletModal}>
+                <Wallet />
+                Connect Wallet
+              </Button>
+              <Button asChild variant="outline" size="xl">
+                <Link to="/factory">
+                  Enter Factory
+                  <ArrowRight />
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </section>

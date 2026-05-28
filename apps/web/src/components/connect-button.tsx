@@ -1,17 +1,17 @@
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Wallet, LogOut } from "lucide-react";
+import { useWalletModal } from "@/lib/wallet-modal-store";
 
 function shortAddr(a: string) {
   return `${a.slice(0, 6)}…${a.slice(-4)}`;
 }
 
 export function ConnectButton() {
-  const { address, isConnected, isConnecting, isReconnecting } = useAccount();
-  const { connectors, connect, isPending } = useConnect();
+  const { address, isConnected, isReconnecting } = useAccount();
   const { disconnect } = useDisconnect();
+  const openModal = useWalletModal((s) => s.open);
 
-  // Doc-recommended: handle all four useAccount states to avoid UI flashes
   if (isReconnecting) {
     return (
       <Button variant="ghost" size="sm" disabled>
@@ -39,21 +39,10 @@ export function ConnectButton() {
     );
   }
 
-  // Prefer baseAccount connector over injected
-  const baseAcc =
-    connectors.find((c) => c.id === "baseAccount") ?? connectors[0];
-
-  const busy = isPending || isConnecting;
-
   return (
-    <Button
-      variant="base"
-      size="sm"
-      onClick={() => baseAcc && connect({ connector: baseAcc })}
-      disabled={busy}
-    >
+    <Button variant="base" size="sm" onClick={openModal}>
       <Wallet />
-      {busy ? "Connecting…" : "Connect Wallet"}
+      Connect Wallet
     </Button>
   );
 }
