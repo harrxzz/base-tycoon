@@ -9,9 +9,9 @@ export const ACTIVE_CHAIN_ID = baseSepolia.id; // 84532
 
 // Base Tycoon v2 — vertical tower idle game. Deployed 2026-05-28.
 export const CONTRACTS = {
-  resources: "0x9407425515E2f7644b0Bb7b5b64f20057e33c155" as Address,
-  drops: "0x2bb211838F3333B8F3db6Dc96aA9898a843f231B" as Address,
-  game: "0x1d993B8826A902EAB9CC6Ab4b0e1eA2dAf462D9b" as Address,
+  resources: "0x9407425515E2F7644b0bb7B5B64F20057e33c155" as Address,
+  drops: "0x2bb211838F3333b8F3DB6DC96AA9898A843f231b" as Address,
+  game: "0x1D993B8826a902eaB9CC6AB4B0E1EA2DaF462d9B" as Address,
 } as const;
 
 // ---------- ABIs ----------

@@ -23,7 +23,7 @@ function fmt(n: bigint | number) {
 function StageContent({ stageId }: { stageId: StageId }) {
   const stage = STAGE_LIST.find((s) => s.id === stageId)!;
   const { buildings, balances, pending, refetch } = useStageData(stageId);
-  const { refetch: refetchPlayer } = usePlayer();
+  const { player, refetch: refetchPlayer } = usePlayer();
   const tx = useGameTx();
 
   const [busy, setBusy] = useState<{ step: Step | null; action: string | null }>({
@@ -75,6 +75,13 @@ function StageContent({ stageId }: { stageId: StageId }) {
     stage.id < 6 &&
     buildings[finalStep - 1]?.built &&
     finalOwned >= UNLOCK_COST;
+
+  // Detect uninitialized player on Stage 1 — Step 1 is auto-built onchain
+  // but only after the very first transaction. Show a Start Mining CTA.
+  const needsEnrollment =
+    stage.id === 1 &&
+    (!player || player.highestStage === 0) &&
+    !buildings[0]?.built;
 
   return (
     <motion.div
@@ -140,6 +147,40 @@ function StageContent({ stageId }: { stageId: StageId }) {
           run("upgrade", step, () => tx.upgrade(stage.id, step))
         }
       />
+
+      {needsEnrollment && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-4 mt-4 rounded-2xl border border-base-blue/40 bg-base-blue/10 p-5 text-center backdrop-blur"
+        >
+          <p className="mb-3 text-sm text-muted-foreground">
+            Welcome, tycoon. Send your first transaction to claim your starter
+            Twig Patch — it's free and starts producing immediately.
+          </p>
+          <Button
+            variant="base"
+            size="lg"
+            disabled={tx.isPending || tx.isMining || busy.action !== null}
+            onClick={() =>
+              run("enroll", 1 as Step, () => tx.claim(stage.id, 1 as Step))
+            }
+            className="w-full"
+          >
+            {busy.action === "enroll" || tx.isPending || tx.isMining ? (
+              <>
+                <span className="size-4 animate-spin rounded-full border-2 border-current border-r-transparent" />
+                Starting…
+              </>
+            ) : (
+              <>
+                <Hammer />
+                Start Mining
+              </>
+            )}
+          </Button>
+        </motion.div>
+      )}
     </motion.div>
   );
 }
