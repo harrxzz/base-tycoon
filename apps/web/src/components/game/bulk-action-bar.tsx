@@ -121,13 +121,13 @@ export function BulkActionBar({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.2 }}
-        className="mx-4 mb-4 rounded-xl border border-base-blue/30 bg-gradient-to-r from-base-blue/10 via-card/40 to-card/40 p-3 backdrop-blur"
+        className="mx-4 mb-4 rounded-[12px] mac-card p-3"
       >
-        <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-base-blue">
+        <div className="mb-2 flex items-center gap-1.5 text-[11px] font-medium text-mac-blue">
           <Layers className="size-3.5" />
           <span>Smart Wallet Batch</span>
           {supportsPaymaster && (
-            <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
+            <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-mac-green/15 px-2 py-0.5 text-[10px] font-medium text-mac-green">
               <Sparkles className="size-2.5" />
               Gas Free
             </span>

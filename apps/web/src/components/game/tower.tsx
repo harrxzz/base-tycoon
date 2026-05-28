@@ -56,7 +56,7 @@ export function Tower({
   const ordered = [...buildings].map((b, i) => ({ b, step: (i + 1) as Step })).reverse();
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col">
+    <div className="mx-auto flex w-full max-w-md flex-col overflow-hidden rounded-[14px] mac-card">
       {ordered.map(({ b, step }, idx) => {
         const stepDef = stage.steps[step - 1];
         const owned = balances[step - 1] ?? 0n;
@@ -77,7 +77,6 @@ export function Tower({
 
         const stepIsLast = step === STEPS_PER_STAGE;
         const stepIsFirst = step === 1;
-        const reservedTopCorner = idx === 0; // top of tower
 
         return (
           <motion.div
@@ -89,18 +88,16 @@ export function Tower({
           >
             <div
               className={cn(
-                "relative overflow-hidden border border-border/60 bg-card/80 backdrop-blur transition-all",
-                reservedTopCorner ? "rounded-t-2xl" : "",
-                idx === ordered.length - 1 ? "rounded-b-2xl" : "",
-                idx > 0 ? "border-t-0" : "",
-                empty && "opacity-50",
+                "relative overflow-hidden transition-all",
+                idx > 0 && "border-t border-white/[0.06]",
+                empty && "opacity-60",
               )}
             >
               {/* Top accent line for built */}
               {b.built && (
                 <div
                   className={cn(
-                    "absolute inset-x-0 top-0 h-0.5 opacity-80",
+                    "absolute inset-x-0 top-0 h-[2px] opacity-90",
                     stage.accentClass,
                     "bg-current",
                   )}
@@ -111,8 +108,10 @@ export function Tower({
                 {/* Emoji square */}
                 <div
                   className={cn(
-                    "grid size-12 place-items-center rounded-lg text-2xl shadow-inner transition-all",
-                    b.built ? "bg-card" : "bg-card/30",
+                    "grid size-11 place-items-center rounded-[10px] text-2xl transition-all",
+                    b.built
+                      ? "bg-white/[0.05] border border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+                      : "bg-white/[0.02] border border-white/[0.04]",
                     b.built && pend > 0n && "animate-pulse",
                   )}
                 >
@@ -130,37 +129,34 @@ export function Tower({
                 {/* Center: name + status */}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
                       Step {step} {stepIsLast && "· Final"}
                     </p>
                     {b.built && (
                       <span
                         className={cn(
-                          "rounded bg-foreground/10 px-1.5 py-0.5 text-[10px] font-mono",
-                          b.level >= MAX_LEVEL && "bg-amber-500/20 text-amber-300",
+                          "rounded-[4px] bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-mono",
+                          b.level >= MAX_LEVEL && "bg-mac-orange/20 text-mac-orange",
                         )}
                       >
                         L{b.level}
                       </span>
                     )}
                   </div>
-                  <h3 className="truncate text-base font-semibold">
+                  <h3 className="truncate text-[15px] font-semibold tracking-tight">
                     {stepDef.name}
                   </h3>
                   {b.built ? (
-                    <p className="text-xs text-muted-foreground">
-                      <span className="font-mono">
-                        +1
-                      </span>{" "}
-                      every{" "}
+                    <p className="text-[11px] text-muted-foreground">
+                      <span className="font-mono">+1</span> every{" "}
                       <span className="font-mono">{interval}s</span>
                     </p>
                   ) : constructing ? (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       Constructing — {fmtSeconds(remaining)}
                     </p>
                   ) : (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       Cost: <span className="font-mono">{fmt(cost)}</span>{" "}
                       {step > 1 ? stage.steps[step - 2].name : "—"}
                     </p>
@@ -169,9 +165,11 @@ export function Tower({
 
                 {/* Right: balance + pending */}
                 <div className="text-right">
-                  <p className="font-mono text-sm font-semibold">{fmt(owned)}</p>
+                  <p className="font-mono text-[15px] font-semibold tracking-tight">
+                    {fmt(owned)}
+                  </p>
                   {pend > 0n && (
-                    <p className="font-mono text-xs text-emerald-400">
+                    <p className="font-mono text-[11px] text-mac-green">
                       +{fmt(pend)}
                     </p>
                   )}
@@ -181,7 +179,7 @@ export function Tower({
               {/* Construction progress bar */}
               {constructing && (
                 <div className="px-4 pb-2">
-                  <div className="h-1 overflow-hidden rounded bg-foreground/10">
+                  <div className="h-[3px] overflow-hidden rounded-full bg-white/[0.06]">
                     <motion.div
                       key={buildEndsAt}
                       className={cn("h-full bg-current", stage.accentClass)}
@@ -194,7 +192,7 @@ export function Tower({
               )}
 
               {/* Action row */}
-              <div className="flex flex-wrap items-center gap-2 border-t border-border/40 bg-background/30 px-4 py-2">
+              <div className="flex flex-wrap items-center gap-1.5 border-t border-white/[0.04] bg-black/20 px-3 py-2">
                 {empty && (
                   <Button
                     size="sm"

@@ -164,7 +164,7 @@ function StageContent({ stageId }: { stageId: StageId }) {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mx-4 mt-4 rounded-2xl border border-base-blue/40 bg-base-blue/10 p-5 text-center backdrop-blur"
+          className="mx-4 mt-4 rounded-2xl border border-mac-blue/40 bg-mac-blue/10 p-5 text-center backdrop-blur"
         >
           <p className="mb-3 text-sm text-muted-foreground">
             Welcome, tycoon. Send your first transaction to claim your starter
@@ -206,7 +206,7 @@ export default function FactoryRoute() {
   if (!isConnected) {
     return (
       <section className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-4 text-center">
-        <div className="grid size-14 place-items-center rounded-2xl bg-base-blue/10 text-base-blue">
+        <div className="grid size-14 place-items-center rounded-2xl bg-mac-blue/10 text-mac-blue">
           <Hammer />
         </div>
         <h2 className="mt-5 text-2xl font-bold sm:text-3xl">
@@ -228,9 +228,9 @@ export default function FactoryRoute() {
   return (
     <div className={cn("relative", stage.bgGradient)}>
       {/* Stage tab strip */}
-      <div className="sticky top-14 z-30 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+      <div className="sticky top-12 z-30 border-b border-white/[0.06] vibrancy">
         <div className="mx-auto max-w-md overflow-x-auto px-4">
-          <div className="flex min-w-max items-center gap-1 py-2">
+          <div className="flex min-w-max items-center gap-0.5 py-2">
             {STAGE_LIST.map((s) => {
               const Icon = s.icon;
               const locked = !unlocked.has(s.id);
@@ -241,25 +241,25 @@ export default function FactoryRoute() {
                   onClick={() => !locked && setActiveStage(s.id)}
                   disabled={locked}
                   className={cn(
-                    "group flex items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-all",
-                    isActive && "bg-accent text-accent-foreground",
+                    "group flex items-center gap-1.5 rounded-[6px] px-2.5 py-1 text-[13px] font-medium transition-all",
+                    isActive && "bg-white/10 text-foreground",
                     !isActive &&
                       !locked &&
-                      "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+                      "text-muted-foreground hover:bg-white/[0.06] hover:text-foreground",
                     locked && "cursor-not-allowed text-muted-foreground/40",
                   )}
                 >
                   {locked ? (
-                    <Lock className="size-3.5" />
+                    <Lock className="size-3" />
                   ) : (
-                    <Icon className="size-3.5" />
+                    <Icon className={cn("size-3", isActive && s.accentClass)} />
                   )}
-                  <span className="font-medium">S{s.id}</span>
+                  <span>S{s.id}</span>
                 </button>
               );
             })}
             {player && (
-              <span className="ml-auto flex gap-3 px-2 font-mono text-xs text-muted-foreground">
+              <span className="ml-auto flex gap-3 px-2 font-mono text-[11px] text-muted-foreground">
                 <span>Tx {fmt(player.totalTx)}</span>
               </span>
             )}

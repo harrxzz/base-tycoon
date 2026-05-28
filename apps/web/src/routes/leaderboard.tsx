@@ -13,7 +13,7 @@ export default function LeaderboardRoute() {
   return (
     <section className="mx-auto max-w-4xl px-4 py-12">
       <div className="mb-8 text-center">
-        <div className="mx-auto grid size-12 place-items-center rounded-xl bg-base-blue/10 text-base-blue">
+        <div className="mx-auto grid size-12 place-items-center rounded-xl bg-mac-blue/10 text-mac-blue">
           <Trophy />
         </div>
         <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
@@ -38,7 +38,7 @@ export default function LeaderboardRoute() {
                   <span
                     className={`grid size-9 place-items-center rounded-md font-mono text-sm ${
                       l.rank === 1
-                        ? "bg-amber-500/15 text-amber-400"
+                        ? "bg-mac-orange/15 text-mac-orange"
                         : l.rank === 2
                           ? "bg-zinc-400/15 text-zinc-300"
                           : l.rank === 3

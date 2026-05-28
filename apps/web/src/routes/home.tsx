@@ -23,29 +23,29 @@ const smartWalletBenefits = [
     icon: Zap,
     title: "Zero gas fees",
     desc: "Every onchain action sponsored by our Paymaster. You play, we pay.",
-    accent: "text-yellow-400",
-    bg: "bg-yellow-400/10",
+    accent: "text-mac-yellow",
+    bg: "bg-mac-yellow/10",
   },
   {
     icon: Layers,
     title: "Batch everything",
     desc: "Claim 8 steps in a single signature. One tap, eight rewards.",
-    accent: "text-base-blue",
-    bg: "bg-base-blue/10",
+    accent: "text-mac-blue",
+    bg: "bg-mac-blue/10",
   },
   {
     icon: Fingerprint,
     title: "Passkey login",
     desc: "Face ID or Touch ID. No 12-word seed phrase to lose.",
-    accent: "text-emerald-400",
-    bg: "bg-emerald-400/10",
+    accent: "text-mac-green",
+    bg: "bg-mac-green/10",
   },
   {
     icon: Shield,
     title: "ERC-4337 security",
     desc: "Account abstraction with rotation, recovery, and spend limits.",
-    accent: "text-purple-400",
-    bg: "bg-purple-400/10",
+    accent: "text-mac-purple",
+    bg: "bg-mac-purple/10",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function HomeRoute() {
             transition={{ duration: 0.5 }}
             className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-xs text-muted-foreground backdrop-blur"
           >
-            <Zap className="size-3 text-base-blue" />
+            <Zap className="size-3 text-mac-blue" />
             Built on Base · Gas sponsored by Paymaster
           </motion.div>
 
@@ -81,7 +81,7 @@ export default function HomeRoute() {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-balance text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl"
           >
-            From <span className="text-base-blue">Base</span> to{" "}
+            From <span className="text-mac-blue">Base</span> to{" "}
             <span className="bg-gradient-to-r from-stage-3 via-stage-4 to-stage-5 bg-clip-text text-transparent">
               Tycoon
             </span>
@@ -120,21 +120,21 @@ export default function HomeRoute() {
       {/* Smart Wallet education */}
       <section className="relative mx-auto max-w-6xl px-4 py-16">
         <div className="mb-10 text-center">
-          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-base-blue/40 bg-base-blue/10 px-3 py-1 text-xs font-medium text-base-blue">
+          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-mac-blue/30 bg-mac-blue/10 px-3 py-1 text-[11px] font-medium text-mac-blue">
             <Sparkles className="size-3" />
             Why Base Account
           </div>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
             Smart wallets, smarter gameplay.
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] text-muted-foreground">
             Base Tycoon runs best on Base Account — a smart contract wallet
             that unlocks features regular EOAs can't touch. Here's why it
             matters.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {smartWalletBenefits.map((b, i) => (
             <motion.div
               key={b.title}
@@ -143,16 +143,18 @@ export default function HomeRoute() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
             >
-              <Card className="h-full border-border/60 bg-card/40 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-base-blue/30 hover:shadow-lg">
-                <CardContent className="flex gap-4 p-6">
+              <Card className="h-full transition-all hover:-translate-y-0.5 hover:border-white/[0.12]">
+                <CardContent className="flex gap-4 p-5">
                   <div
-                    className={`grid size-11 shrink-0 place-items-center rounded-lg ${b.bg} ${b.accent}`}
+                    className={`grid size-10 shrink-0 place-items-center rounded-[10px] ${b.bg} ${b.accent}`}
                   >
-                    <b.icon className="size-5" />
+                    <b.icon className="size-[18px]" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-base font-semibold">{b.title}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    <h3 className="text-[15px] font-semibold tracking-tight">
+                      {b.title}
+                    </h3>
+                    <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
                       {b.desc}
                     </p>
                   </div>
@@ -168,20 +170,22 @@ export default function HomeRoute() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-6 grid grid-cols-1 gap-3 rounded-xl border border-border/60 bg-card/30 p-4 sm:grid-cols-3"
+          className="mt-6 grid grid-cols-1 gap-2 rounded-[12px] mac-card p-3 sm:grid-cols-3"
         >
-          <div className="flex items-center justify-center gap-2 rounded-lg bg-base-blue/10 px-3 py-2.5 text-sm">
-            <Sparkles className="size-4 text-base-blue" />
-            <span className="font-medium text-base-blue">Base Account</span>
-            <span className="text-xs text-muted-foreground">recommended</span>
+          <div className="flex items-center justify-center gap-2 rounded-[8px] bg-mac-blue/10 px-3 py-2 text-[13px]">
+            <Sparkles className="size-3.5 text-mac-blue" />
+            <span className="font-medium text-mac-blue">Base Account</span>
+            <span className="text-[11px] text-muted-foreground">
+              recommended
+            </span>
           </div>
-          <div className="flex items-center justify-center gap-2 px-3 py-2.5 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-2 px-3 py-2 text-[13px] text-muted-foreground">
             <span>vs</span>
           </div>
-          <div className="flex items-center justify-center gap-2 rounded-lg bg-card/40 px-3 py-2.5 text-sm">
-            <Wallet className="size-4 text-muted-foreground" />
+          <div className="flex items-center justify-center gap-2 rounded-[8px] bg-white/[0.04] px-3 py-2 text-[13px]">
+            <Wallet className="size-3.5 text-muted-foreground" />
             <span className="font-medium">MetaMask · Rabby · OKX</span>
-            <span className="text-xs text-muted-foreground">supported</span>
+            <span className="text-[11px] text-muted-foreground">supported</span>
           </div>
         </motion.div>
 
@@ -257,7 +261,7 @@ export default function HomeRoute() {
 
       {/* CTA strip */}
       <section className="relative mx-auto max-w-6xl px-4 py-20">
-        <Card className="relative overflow-hidden border-base-blue/20 bg-gradient-to-br from-base-blue/10 via-card to-card">
+        <Card className="relative overflow-hidden border-mac-blue/20 bg-gradient-to-br from-mac-blue/10 via-card to-card">
           <SparkleParticles count={20} color="oklch(0.7 0.18 258)" />
           <CardContent className="relative flex flex-col items-center gap-5 p-10 text-center sm:p-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">

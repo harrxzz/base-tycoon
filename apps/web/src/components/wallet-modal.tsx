@@ -50,7 +50,7 @@ function ConnectorRow({
     <button
       onClick={() => onConnect(connector)}
       disabled={pending}
-      className="flex w-full items-center gap-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm transition-all hover:border-base-blue/40 hover:bg-card disabled:opacity-50"
+      className="flex w-full items-center gap-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm transition-all hover:border-mac-blue/40 hover:bg-card disabled:opacity-50"
     >
       {connector.icon ? (
         <img
@@ -91,7 +91,7 @@ export function WalletModal() {
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="mb-2 inline-flex w-fit items-center gap-1.5 rounded-full border border-base-blue/40 bg-base-blue/10 px-2.5 py-1 text-xs font-medium text-base-blue">
+          <div className="mb-2 inline-flex w-fit items-center gap-1.5 rounded-full border border-mac-blue/40 bg-mac-blue/10 px-2.5 py-1 text-xs font-medium text-mac-blue">
             <Sparkles className="size-3" />
             Recommended
           </div>
@@ -111,7 +111,7 @@ export function WalletModal() {
               key={b.title}
               className="flex items-start gap-3 rounded-lg border border-border/60 bg-card/40 p-3"
             >
-              <div className="grid size-8 shrink-0 place-items-center rounded-md bg-base-blue/10 text-base-blue">
+              <div className="grid size-8 shrink-0 place-items-center rounded-md bg-mac-blue/10 text-mac-blue">
                 <b.icon className="size-4" />
               </div>
               <div className="min-w-0">
