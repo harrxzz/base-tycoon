@@ -1,13 +1,12 @@
 import { http, createConfig } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
-import { coinbaseWallet, injected } from "wagmi/connectors";
+import { baseAccount, injected } from "wagmi/connectors";
 
 export const wagmiConfig = createConfig({
   chains: [baseSepolia],
   connectors: [
-    coinbaseWallet({
+    baseAccount({
       appName: "Base Tycoon",
-      preference: { options: "smartWalletOnly" },
     }),
     injected(),
   ],

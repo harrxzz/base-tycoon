@@ -7,9 +7,19 @@ function shortAddr(a: string) {
 }
 
 export function ConnectButton() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, isConnecting, isReconnecting } = useAccount();
   const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
+
+  // Doc-recommended: handle all four useAccount states to avoid UI flashes
+  if (isReconnecting) {
+    return (
+      <Button variant="ghost" size="sm" disabled>
+        <Wallet />
+        Reconnecting…
+      </Button>
+    );
+  }
 
   if (isConnected && address) {
     return (
@@ -29,17 +39,21 @@ export function ConnectButton() {
     );
   }
 
-  const cb = connectors.find((c) => c.id === "coinbaseWalletSDK") ?? connectors[0];
+  // Prefer baseAccount connector over injected
+  const baseAcc =
+    connectors.find((c) => c.id === "baseAccount") ?? connectors[0];
+
+  const busy = isPending || isConnecting;
 
   return (
     <Button
       variant="base"
       size="sm"
-      onClick={() => cb && connect({ connector: cb })}
-      disabled={isPending}
+      onClick={() => baseAcc && connect({ connector: baseAcc })}
+      disabled={busy}
     >
       <Wallet />
-      {isPending ? "Connecting…" : "Connect Wallet"}
+      {busy ? "Connecting…" : "Connect Wallet"}
     </Button>
   );
 }
