@@ -115,7 +115,7 @@ export default function HomeRoute() {
                     {s.tagline}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {s.subTiers.map((t) => (
+                    {s.steps.slice(0, 4).map((t) => (
                       <span
                         key={t.name}
                         className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/40 px-2 py-0.5 text-xs"
@@ -124,6 +124,9 @@ export default function HomeRoute() {
                         <span className="text-muted-foreground">{t.name}</span>
                       </span>
                     ))}
+                    <span className="inline-flex items-center rounded-full border border-border/60 bg-background/40 px-2 py-0.5 text-xs text-muted-foreground">
+                      +4 more
+                    </span>
                   </div>
                 </CardContent>
               </Card>

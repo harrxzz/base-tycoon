@@ -7,15 +7,14 @@ import { baseSepolia } from "viem/chains";
 export const ACTIVE_CHAIN = baseSepolia;
 export const ACTIVE_CHAIN_ID = baseSepolia.id; // 84532
 
+// Base Tycoon v2 — vertical tower idle game. Deployed 2026-05-28.
 export const CONTRACTS = {
-  resources: "0xF8CdE874383c97CACAC993dE344103336dF10477" as Address,
-  drops: "0x4a27Be07308CE89aa347dc3e9cbbF21f832f3073" as Address,
-  game: "0x116aB9E41d88468C4feBE3C03341EC4FE7b636b4" as Address,
+  resources: "0x9407425515E2f7644b0Bb7b5b64f20057e33c155" as Address,
+  drops: "0x2bb211838F3333B8F3db6Dc96aA9898a843f231B" as Address,
+  game: "0x1d993B8826A902EAB9CC6Ab4b0e1eA2dAf462D9b" as Address,
 } as const;
 
 // ---------- ABIs ----------
-// Hand-curated minimal ABIs for the calls the UI needs. Generated from the
-// Foundry artifacts; trim to keep bundle small.
 
 export const FACTORY_GAME_ABI = [
   // reads
@@ -27,26 +26,36 @@ export const FACTORY_GAME_ABI = [
     outputs: [
       { name: "highestStage", type: "uint8" },
       { name: "prestigeCount", type: "uint64" },
-      { name: "totalTaps", type: "uint128" },
       { name: "totalTx", type: "uint128" },
+      { name: "totalProduced", type: "uint128" },
     ],
   },
   {
     type: "function",
-    name: "getMine",
+    name: "getBuilding",
     stateMutability: "view",
     inputs: [
       { name: "who", type: "address" },
       { name: "stage", type: "uint8" },
-      { name: "subTier", type: "uint8" },
+      { name: "step", type: "uint8" },
     ],
     outputs: [
-      { name: "unlocked", type: "bool" },
-      { name: "level", type: "uint32" },
-      { name: "autoRate", type: "uint32" },
+      { name: "built", type: "bool" },
+      { name: "level", type: "uint8" },
+      { name: "buildEndsAt", type: "uint64" },
       { name: "lastClaim", type: "uint64" },
-      { name: "lastTap", type: "uint64" },
+      { name: "boostSlot", type: "uint8" },
     ],
+  },
+  {
+    type: "function",
+    name: "isStageUnlocked",
+    stateMutability: "view",
+    inputs: [
+      { name: "who", type: "address" },
+      { name: "stage", type: "uint8" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
   },
   {
     type: "function",
@@ -55,7 +64,7 @@ export const FACTORY_GAME_ABI = [
     inputs: [
       { name: "who", type: "address" },
       { name: "stage", type: "uint8" },
-      { name: "subTier", type: "uint8" },
+      { name: "step", type: "uint8" },
     ],
     outputs: [{ name: "", type: "uint256" }],
   },
@@ -68,19 +77,29 @@ export const FACTORY_GAME_ABI = [
   },
   {
     type: "function",
-    name: "builderCode",
+    name: "totalActions",
     stateMutability: "view",
     inputs: [],
-    outputs: [{ name: "", type: "bytes32" }],
+    outputs: [{ name: "", type: "uint256" }],
   },
   // writes
   {
     type: "function",
-    name: "tap",
+    name: "build",
     stateMutability: "nonpayable",
     inputs: [
       { name: "stage", type: "uint8" },
-      { name: "subTier", type: "uint8" },
+      { name: "step", type: "uint8" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "finalize",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "stage", type: "uint8" },
+      { name: "step", type: "uint8" },
     ],
     outputs: [],
   },
@@ -90,27 +109,17 @@ export const FACTORY_GAME_ABI = [
     stateMutability: "nonpayable",
     inputs: [
       { name: "stage", type: "uint8" },
-      { name: "subTier", type: "uint8" },
+      { name: "step", type: "uint8" },
     ],
     outputs: [],
   },
   {
     type: "function",
-    name: "upgradeMine",
+    name: "upgrade",
     stateMutability: "nonpayable",
     inputs: [
       { name: "stage", type: "uint8" },
-      { name: "subTier", type: "uint8" },
-    ],
-    outputs: [],
-  },
-  {
-    type: "function",
-    name: "combine",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "stage", type: "uint8" },
-      { name: "fromSub", type: "uint8" },
+      { name: "step", type: "uint8" },
     ],
     outputs: [],
   },
@@ -138,12 +147,21 @@ export const FACTORY_GAME_ABI = [
   // events
   {
     type: "event",
-    name: "Tapped",
+    name: "BuildStarted",
     inputs: [
       { name: "player", type: "address", indexed: true },
       { name: "stage", type: "uint8", indexed: false },
-      { name: "subTier", type: "uint8", indexed: false },
-      { name: "amount", type: "uint256", indexed: false },
+      { name: "step", type: "uint8", indexed: false },
+      { name: "endsAt", type: "uint64", indexed: false },
+    ],
+  },
+  {
+    type: "event",
+    name: "BuildFinalized",
+    inputs: [
+      { name: "player", type: "address", indexed: true },
+      { name: "stage", type: "uint8", indexed: false },
+      { name: "step", type: "uint8", indexed: false },
     ],
   },
   {
@@ -152,18 +170,18 @@ export const FACTORY_GAME_ABI = [
     inputs: [
       { name: "player", type: "address", indexed: true },
       { name: "stage", type: "uint8", indexed: false },
-      { name: "subTier", type: "uint8", indexed: false },
+      { name: "step", type: "uint8", indexed: false },
       { name: "amount", type: "uint256", indexed: false },
     ],
   },
   {
     type: "event",
-    name: "MineUpgraded",
+    name: "Upgraded",
     inputs: [
       { name: "player", type: "address", indexed: true },
       { name: "stage", type: "uint8", indexed: false },
-      { name: "subTier", type: "uint8", indexed: false },
-      { name: "newLevel", type: "uint32", indexed: false },
+      { name: "step", type: "uint8", indexed: false },
+      { name: "newLevel", type: "uint8", indexed: false },
     ],
   },
   {
@@ -197,13 +215,6 @@ export const RESOURCES_ABI = [
     ],
     outputs: [{ name: "", type: "uint256[]" }],
   },
-  {
-    type: "function",
-    name: "totalSupply",
-    stateMutability: "view",
-    inputs: [{ name: "id", type: "uint256" }],
-    outputs: [{ name: "", type: "uint256" }],
-  },
 ] as const;
 
 export const DROPS_ABI = [
@@ -214,30 +225,42 @@ export const DROPS_ABI = [
     inputs: [{ name: "owner", type: "address" }],
     outputs: [{ name: "", type: "uint256" }],
   },
-  {
-    type: "function",
-    name: "tokenOfOwnerByIndex",
-    stateMutability: "view",
-    inputs: [
-      { name: "owner", type: "address" },
-      { name: "index", type: "uint256" },
-    ],
-    outputs: [{ name: "", type: "uint256" }],
-  },
-  {
-    type: "function",
-    name: "meta",
-    stateMutability: "view",
-    inputs: [{ name: "id", type: "uint256" }],
-    outputs: [
-      { name: "rarity", type: "uint8" },
-      { name: "stage", type: "uint8" },
-      { name: "mintedAt", type: "uint64" },
-    ],
-  },
 ] as const;
 
-/** Encode (stage, subTier) into ERC-1155 token id. Mirrors GameConstants.sol. */
-export function tokenId(stage: number, subTier: number): bigint {
-  return BigInt(stage * 10 + subTier);
+/** Encode (stage, step) into ERC-1155 token id. Mirrors GameConstants.sol. */
+export function tokenId(stage: number, step: number): bigint {
+  return BigInt(stage * 100 + step);
+}
+
+// ---------- Game balance (mirrors GameConstants.sol) ----------
+
+export const STEPS_PER_STAGE = 8;
+export const STAGE_COUNT = 6;
+export const MAX_LEVEL = 10;
+export const UNLOCK_COST = 10n;
+
+const BUILD_TIME_TABLE = [0, 10, 30, 60, 180, 600, 1800, 3600, 7200];
+const BASE_INTERVAL_TABLE = [0, 5, 15, 30, 60, 180, 600, 1800, 3600];
+const BUILD_COST_TABLE = [0n, 0n, 5n, 8n, 10n, 12n, 15n, 20n, 25n];
+
+export function buildTime(step: number): number {
+  return BUILD_TIME_TABLE[step] ?? 0;
+}
+export function baseInterval(step: number): number {
+  return BASE_INTERVAL_TABLE[step] ?? 0;
+}
+export function buildCost(step: number): bigint {
+  return BUILD_COST_TABLE[step] ?? 0n;
+}
+export function upgradeCost(currentLevel: number): bigint {
+  return BigInt(currentLevel * 10);
+}
+export function effectiveInterval(step: number, level: number): number {
+  if (level === 0) return 0;
+  let it = baseInterval(step);
+  for (let i = 1; i < level; i++) {
+    it = Math.floor((it * 2) / 3);
+    if (it < 1) it = 1;
+  }
+  return it;
 }

@@ -1,5 +1,5 @@
-// Base Tycoon — Stage & Sub-Tier definitions
-// 6 stages × 4 sub-tiers each = 24 unique resources
+// Base Tycoon — Stage & Step definitions
+// 6 stages × 8 steps each = 48 unique resources
 
 import {
   Trees,
@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 
 export type StageId = 1 | 2 | 3 | 4 | 5 | 6;
-export type SubTier = 0 | 1 | 2 | 3;
+export type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
-export interface SubTierDef {
+export interface StepDef {
   name: string;
   emoji: string;
   description: string;
@@ -26,27 +26,40 @@ export interface StageDef {
   name: string;
   tagline: string;
   icon: LucideIcon;
-  /** Tailwind utility colors (oklch via @theme) */
   accentClass: string;
   bgGradient: string;
-  subTiers: [SubTierDef, SubTierDef, SubTierDef, SubTierDef];
+  /** index 0..7 = step 1..8 */
+  steps: [
+    StepDef,
+    StepDef,
+    StepDef,
+    StepDef,
+    StepDef,
+    StepDef,
+    StepDef,
+    StepDef,
+  ];
 }
 
 export const STAGES: Record<StageId, StageDef> = {
   1: {
     id: 1,
     slug: "lumber",
-    name: "Lumber Workshop",
-    tagline: "Whittle twigs into thrones.",
+    name: "Lumber Empire",
+    tagline: "Twigs to Throne — every great empire starts in the woods.",
     icon: Trees,
     accentClass: "text-stage-1",
     bgGradient:
       "bg-gradient-to-br from-amber-950/40 via-amber-900/20 to-background",
-    subTiers: [
-      { name: "Twig", emoji: "🌿", description: "Snapped from the forest floor." },
-      { name: "Plank", emoji: "🪵", description: "Sawn, planed, ready to build." },
-      { name: "Chair", emoji: "🪑", description: "Hand-joined cottage chair." },
-      { name: "Throne", emoji: "👑", description: "A seat fit for an industrialist." },
+    steps: [
+      { name: "Twig Patch",   emoji: "🌿", description: "Forage broken twigs from the forest floor." },
+      { name: "Sawmill",      emoji: "🪚", description: "Saw twigs into rough planks." },
+      { name: "Plank Yard",   emoji: "🪵", description: "Stack and cure planks." },
+      { name: "Workshop",     emoji: "🔨", description: "Carve planks into joinery." },
+      { name: "Joinery",      emoji: "🛠️", description: "Assemble joined chair frames." },
+      { name: "Furniture Co", emoji: "🪑", description: "Polish chairs into showroom pieces." },
+      { name: "Showroom",     emoji: "🏬", description: "Curate the finest into thrones." },
+      { name: "Throne Hall",  emoji: "👑", description: "Coronation pieces, fit for empire." },
     ],
   },
   2: {
@@ -58,11 +71,15 @@ export const STAGES: Record<StageId, StageDef> = {
     accentClass: "text-stage-2",
     bgGradient:
       "bg-gradient-to-br from-stone-900/60 via-amber-950/30 to-background",
-    subTiers: [
-      { name: "Bean", emoji: "🫘", description: "Sun-dried cocoa beans." },
-      { name: "Espresso", emoji: "☕", description: "Pulled to perfection." },
-      { name: "Latte", emoji: "🥛", description: "House signature, microfoam." },
-      { name: "Golden Cup", emoji: "🏆", description: "The platonic ideal of brew." },
+    steps: [
+      { name: "Cocoa Farm",   emoji: "🌳", description: "Harvest sun-dried cocoa pods." },
+      { name: "Bean Roaster", emoji: "🫘", description: "Roast raw beans to perfection." },
+      { name: "Grinder",      emoji: "⚙️", description: "Grind to espresso-fine powder." },
+      { name: "Espresso Bar", emoji: "☕", description: "Pull espresso shots." },
+      { name: "Latte Lab",    emoji: "🥛", description: "Steam microfoam, pour latte art." },
+      { name: "House Blend",  emoji: "🍵", description: "Sign the house signature." },
+      { name: "Specialty",    emoji: "🥃", description: "Single-origin reserves." },
+      { name: "Golden Cup",   emoji: "🏆", description: "The platonic ideal of brew." },
     ],
   },
   3: {
@@ -74,11 +91,15 @@ export const STAGES: Record<StageId, StageDef> = {
     accentClass: "text-stage-3",
     bgGradient:
       "bg-gradient-to-br from-pink-950/50 via-fuchsia-900/30 to-background",
-    subTiers: [
-      { name: "Sugar Crystal", emoji: "🍬", description: "Pure crystalline rush." },
-      { name: "Lollipop", emoji: "🍭", description: "Spiral of joy." },
-      { name: "Gummy Dragon", emoji: "🐉", description: "Chewy mythical beast." },
-      { name: "Diamond Cake", emoji: "🎂", description: "Edible reward of legend." },
+    steps: [
+      { name: "Sugar Mill",      emoji: "🍬", description: "Refine raw sugar crystals." },
+      { name: "Boiling Vat",     emoji: "🫧", description: "Cook hard candy syrup." },
+      { name: "Lollipop Line",   emoji: "🍭", description: "Spin spirals of joy." },
+      { name: "Choco Tempering", emoji: "🍫", description: "Temper bittersweet bars." },
+      { name: "Gummy Press",     emoji: "🐻", description: "Press chewy bears." },
+      { name: "Gummy Dragons",   emoji: "🐉", description: "Limited-edition mythical beasts." },
+      { name: "Cake Atelier",    emoji: "🍰", description: "Tier-stack gourmet cakes." },
+      { name: "Diamond Cake",    emoji: "🎂", description: "Edible reward of legend." },
     ],
   },
   4: {
@@ -90,11 +111,15 @@ export const STAGES: Record<StageId, StageDef> = {
     accentClass: "text-stage-4",
     bgGradient:
       "bg-gradient-to-br from-violet-950/50 via-purple-900/30 to-background",
-    subTiers: [
-      { name: "Quartz Shard", emoji: "🔹", description: "Unrefined silicate." },
-      { name: "Amethyst", emoji: "💜", description: "Deep violet facets." },
-      { name: "Diamond", emoji: "💎", description: "Hardest known clarity." },
-      { name: "Soul Crystal", emoji: "✨", description: "Resonates with intent." },
+    steps: [
+      { name: "Quarry",         emoji: "⛏️", description: "Mine raw silicate shards." },
+      { name: "Cutting Bench",  emoji: "🔹", description: "Cleave shards into facets." },
+      { name: "Amethyst Vault", emoji: "💜", description: "Polish amethysts to violet brilliance." },
+      { name: "Sapphire Lab",   emoji: "🔷", description: "Coax sapphire blue from quartz." },
+      { name: "Emerald Forge",  emoji: "💚", description: "Catalyze emerald lattice." },
+      { name: "Diamond Press",  emoji: "💎", description: "Compress carbon to clarity." },
+      { name: "Reliquary",      emoji: "✨", description: "Charge crystals with intent." },
+      { name: "Soul Crystal",   emoji: "🔮", description: "Resonates with the player's will." },
     ],
   },
   5: {
@@ -106,11 +131,15 @@ export const STAGES: Record<StageId, StageDef> = {
     accentClass: "text-stage-5",
     bgGradient:
       "bg-gradient-to-br from-orange-950/50 via-zinc-900/40 to-background",
-    subTiers: [
-      { name: "Bolt", emoji: "🔩", description: "Forged steel fastener." },
-      { name: "Gear", emoji: "⚙️", description: "Precision-cut transmission." },
-      { name: "Drone", emoji: "🛸", description: "Autonomous unit, online." },
-      { name: "Titan Mech", emoji: "🤖", description: "Pilot-grade walking colossus." },
+    steps: [
+      { name: "Bolt Forge",      emoji: "🔩", description: "Forge tempered fasteners." },
+      { name: "Gear Cutter",     emoji: "⚙️", description: "Mill precision transmissions." },
+      { name: "Servo Bench",     emoji: "🦾", description: "Wind precision actuators." },
+      { name: "Power Core",      emoji: "🔋", description: "Cell pack assembly line." },
+      { name: "Drone Hangar",    emoji: "🛸", description: "Deploy autonomous units." },
+      { name: "Mech Frame",      emoji: "🤖", description: "Weld pilot-grade chassis." },
+      { name: "Pilot Tower",     emoji: "🛗", description: "Fit cockpits and avionics." },
+      { name: "Titan Mech",      emoji: "🦿", description: "World-class walking colossus." },
     ],
   },
   6: {
@@ -122,11 +151,15 @@ export const STAGES: Record<StageId, StageDef> = {
     accentClass: "text-stage-6",
     bgGradient:
       "bg-gradient-to-br from-emerald-950/50 via-green-900/30 to-background",
-    subTiers: [
-      { name: "Sprout", emoji: "🌱", description: "First green of intent." },
-      { name: "Sapling", emoji: "🌿", description: "Young trunk, supple bark." },
-      { name: "Ancient Tree", emoji: "🌳", description: "Centuries-tested roots." },
-      { name: "World Tree", emoji: "🌍", description: "Branches hold the sky." },
+    steps: [
+      { name: "Seedbed",       emoji: "🌱", description: "Sprout tender shoots." },
+      { name: "Sapling Yard",  emoji: "🌿", description: "Train young trunks." },
+      { name: "Pruning Studio",emoji: "✂️", description: "Shape branches with intent." },
+      { name: "Bonsai Pavilion",emoji: "🪴", description: "Curate aged miniatures." },
+      { name: "Stone Garden",  emoji: "🪨", description: "Compose gravel meditation." },
+      { name: "Tea House",     emoji: "🍵", description: "Brew leaves of the master tree." },
+      { name: "Ancient Grove", emoji: "🌳", description: "Centuries-old root masters." },
+      { name: "World Tree",    emoji: "🌍", description: "Branches hold the sky." },
     ],
   },
 };
@@ -134,8 +167,3 @@ export const STAGES: Record<StageId, StageDef> = {
 export const STAGE_LIST = (Object.values(STAGES) as StageDef[]).sort(
   (a, b) => a.id - b.id,
 );
-
-/** Convert (stage, subTier) → ERC-1155 token id. */
-export function tokenId(stage: StageId, sub: SubTier): number {
-  return stage * 10 + sub;
-}

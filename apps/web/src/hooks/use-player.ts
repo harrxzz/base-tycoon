@@ -1,108 +1,125 @@
-import { useReadContract, useReadContracts, useAccount } from "wagmi";
-import { CONTRACTS, FACTORY_GAME_ABI, RESOURCES_ABI, tokenId } from "@/lib/contracts";
-import { STAGE_LIST, type StageId, type SubTier } from "@/lib/stages";
+import {
+  useReadContract,
+  useReadContracts,
+  useAccount,
+} from "wagmi";
+import {
+  CONTRACTS,
+  FACTORY_GAME_ABI,
+  RESOURCES_ABI,
+  tokenId,
+  STEPS_PER_STAGE,
+} from "@/lib/contracts";
+import type { StageId, Step } from "@/lib/stages";
 
 export interface PlayerState {
   highestStage: number;
   prestigeCount: bigint;
-  totalTaps: bigint;
   totalTx: bigint;
+  totalProduced: bigint;
 }
 
-export function usePlayer() {
+export function usePlayer(refresh = 6_000) {
   const { address } = useAccount();
   const { data, isLoading, refetch } = useReadContract({
     address: CONTRACTS.game,
     abi: FACTORY_GAME_ABI,
     functionName: "getPlayer",
     args: address ? [address] : undefined,
-    query: { enabled: !!address, refetchInterval: 8_000 },
+    query: { enabled: !!address, refetchInterval: refresh },
   });
 
   const player: PlayerState | undefined = data
     ? {
         highestStage: Number(data[0]),
         prestigeCount: data[1],
-        totalTaps: data[2],
-        totalTx: data[3],
+        totalTx: data[2],
+        totalProduced: data[3],
       }
     : undefined;
 
   return { player, isLoading, refetch };
 }
 
-export interface MineState {
-  unlocked: boolean;
+export interface BuildingState {
+  built: boolean;
   level: number;
-  autoRate: number;
-  lastClaim: bigint;
-  lastTap: bigint;
+  buildEndsAt: number; // unix seconds
+  lastClaim: number;
+  boostSlot: number;
 }
 
-/** Read all 4 mines for a given stage at once. */
-export function useStageMines(stage: StageId) {
+const STEPS_ARR: Step[] = [1, 2, 3, 4, 5, 6, 7, 8];
+
+/** Read all 8 buildings + balances + pending production for a given stage. */
+export function useStageData(stage: StageId, refresh = 4_000) {
   const { address } = useAccount();
+
+  // 8 getBuilding + 8 balanceOf + 8 pendingProduction = 24 calls in 1 multicall
   const { data, refetch } = useReadContracts({
-    contracts: ([0, 1, 2, 3] as SubTier[]).map((sub) => ({
-      address: CONTRACTS.game,
-      abi: FACTORY_GAME_ABI,
-      functionName: "getMine" as const,
-      args: address ? [address, stage, sub] : undefined,
-    })),
-    query: { enabled: !!address, refetchInterval: 8_000 },
+    contracts: [
+      ...STEPS_ARR.map((step) => ({
+        address: CONTRACTS.game,
+        abi: FACTORY_GAME_ABI,
+        functionName: "getBuilding" as const,
+        args: address ? ([address, stage, step] as const) : undefined,
+      })),
+      ...STEPS_ARR.map((step) => ({
+        address: CONTRACTS.resources,
+        abi: RESOURCES_ABI,
+        functionName: "balanceOf" as const,
+        args: address ? ([address, tokenId(stage, step)] as const) : undefined,
+      })),
+      ...STEPS_ARR.map((step) => ({
+        address: CONTRACTS.game,
+        abi: FACTORY_GAME_ABI,
+        functionName: "pendingProduction" as const,
+        args: address ? ([address, stage, step] as const) : undefined,
+      })),
+    ],
+    query: { enabled: !!address, refetchInterval: refresh },
   });
 
-  const mines: (MineState | undefined)[] = (data ?? []).map((r) => {
-    if (r.status !== "success" || !r.result) return undefined;
-    const [unlocked, level, autoRate, lastClaim, lastTap] = r.result as readonly [
+  const buildings: BuildingState[] = STEPS_ARR.map((_, i) => {
+    const r = (data ?? [])[i];
+    if (!r || r.status !== "success" || !r.result)
+      return { built: false, level: 0, buildEndsAt: 0, lastClaim: 0, boostSlot: 0 };
+    const [built, level, buildEndsAt, lastClaim, boostSlot] = r.result as readonly [
       boolean,
       number,
+      bigint,
+      bigint,
       number,
-      bigint,
-      bigint,
     ];
     return {
-      unlocked,
+      built,
       level: Number(level),
-      autoRate: Number(autoRate),
-      lastClaim,
-      lastTap,
+      buildEndsAt: Number(buildEndsAt),
+      lastClaim: Number(lastClaim),
+      boostSlot: Number(boostSlot),
     };
   });
 
-  return { mines, refetch };
-}
-
-/** Read all 4 sub-tier balances for a given stage. */
-export function useStageBalances(stage: StageId) {
-  const { address } = useAccount();
-  const { data, refetch } = useReadContracts({
-    contracts: ([0, 1, 2, 3] as SubTier[]).map((sub) => ({
-      address: CONTRACTS.resources,
-      abi: RESOURCES_ABI,
-      functionName: "balanceOf" as const,
-      args: address ? [address, tokenId(stage, sub)] : undefined,
-    })),
-    query: { enabled: !!address, refetchInterval: 8_000 },
+  const balances: bigint[] = STEPS_ARR.map((_, i) => {
+    const r = (data ?? [])[STEPS_PER_STAGE + i];
+    return r && r.status === "success" ? (r.result as bigint) : 0n;
   });
 
-  const balances: bigint[] = (data ?? []).map((r) =>
-    r.status === "success" ? (r.result as bigint) : 0n,
-  );
-  return { balances, refetch };
+  const pending: bigint[] = STEPS_ARR.map((_, i) => {
+    const r = (data ?? [])[STEPS_PER_STAGE * 2 + i];
+    return r && r.status === "success" ? (r.result as bigint) : 0n;
+  });
+
+  return { buildings, balances, pending, refetch };
 }
 
-/** Convenience: which stages does the player have unlocked? Stage 1 is auto. */
-export function useUnlockedStages() {
-  const { player } = usePlayer();
-  const unlocked = new Set<StageId>();
-  if (player && player.highestStage > 0) {
-    for (let i = 1; i <= player.highestStage; i++) unlocked.add(i as StageId);
+/** Convenience: which stages does the player have unlocked? */
+export function useUnlockedStages(highestStage = 0): Set<StageId> {
+  const set = new Set<StageId>();
+  if (highestStage > 0) {
+    for (let i = 1; i <= highestStage; i++) set.add(i as StageId);
   } else {
-    // Pre-init: show Stage 1 as available (first tap will init it).
-    unlocked.add(1);
+    set.add(1); // pre-init: show Stage 1 as available
   }
-  return unlocked;
+  return set;
 }
-
-export const ALL_STAGES = STAGE_LIST;
