@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ConnectButton } from "@/components/connect-button";
 import { Tower } from "@/components/game/tower";
+import { BulkActionBar } from "@/components/game/bulk-action-bar";
 import { STAGE_LIST, type StageId, type Step } from "@/lib/stages";
 import { cn } from "@/lib/utils";
 import {
@@ -131,6 +132,17 @@ function StageContent({ stageId }: { stageId: StageId }) {
         )}
       </div>
 
+      <BulkActionBar
+        stageId={stage.id}
+        buildings={buildings}
+        pending={pending}
+        now={now}
+        onSuccess={() => {
+          refetch();
+          refetchPlayer();
+        }}
+      />
+
       <Tower
         stage={stage}
         buildings={buildings}
@@ -201,8 +213,8 @@ export default function FactoryRoute() {
           Connect to enter the factory
         </h2>
         <p className="mt-2 max-w-md text-muted-foreground">
-          One-tap login with Coinbase Smart Wallet. Tap, claim, build your
-          tower step by step.
+          One-tap login with Base Account. Build idle factories, claim onchain
+          rewards, climb the leaderboard.
         </p>
         <div className="mt-6">
           <ConnectButton />
