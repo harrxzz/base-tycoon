@@ -29,7 +29,20 @@ createRoot(document.getElementById("root")!).render(
           <Footer />
         </div>
         <WalletModal />
-        <Toaster theme="dark" position="bottom-right" richColors />
+        <Toaster
+          theme="dark"
+          position="bottom-right"
+          richColors
+          closeButton
+          toastOptions={{
+            classNames: {
+              toast: "!bg-card/95 !border-white/[0.08] !backdrop-blur-xl",
+              title: "!font-medium !tracking-tight",
+              description: "!text-muted-foreground !text-[12px]",
+              actionButton: "!bg-mac-blue !text-white",
+            },
+          }}
+        />
       </BrowserRouter>
     </Providers>
   </StrictMode>,

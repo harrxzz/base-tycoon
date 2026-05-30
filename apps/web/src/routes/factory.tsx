@@ -39,15 +39,78 @@ function StageContent({ stageId }: { stageId: StageId }) {
     return () => clearInterval(id);
   }, []);
 
-  // Refetch + clear busy after tx success
+  // Refetch + clear busy after tx success — also fires action-specific toast
   useEffect(() => {
     if (tx.isSuccess) {
+      // Fire context-aware toast based on what action just succeeded
+      const stepLabel =
+        busy.step !== null ? stage.steps[busy.step - 1]?.name : null;
+      const stepEmoji =
+        busy.step !== null ? stage.steps[busy.step - 1]?.emoji : null;
+      const stepText = stepLabel ? `${stepEmoji} ${stepLabel}` : "step";
+
+      const explorerHref = tx.hash
+        ? `https://sepolia.basescan.org/tx/${tx.hash}`
+        : null;
+      const toastOpts = explorerHref
+        ? {
+            action: {
+              label: "View tx",
+              onClick: () => window.open(explorerHref, "_blank", "noopener"),
+            },
+          }
+        : undefined;
+
+      switch (busy.action) {
+        case "build":
+          toast.success(`Build started`, {
+            description: `${stepText} is constructing.`,
+            ...toastOpts,
+          });
+          break;
+        case "finalize":
+          toast.success(`Build finalized`, {
+            description: `${stepText} is now producing.`,
+            ...toastOpts,
+          });
+          break;
+        case "claim":
+          toast.success(`Resources claimed`, {
+            description: `Pending production from ${stepText} added to balance.`,
+            ...toastOpts,
+          });
+          break;
+        case "upgrade":
+          toast.success(`Level up`, {
+            description: `${stepText} produces faster now.`,
+            ...toastOpts,
+          });
+          break;
+        case "unlockStage":
+          toast.success(`Stage unlocked`, {
+            description: `New industry available — keep climbing.`,
+            ...toastOpts,
+          });
+          break;
+        case "enroll":
+          toast.success(`Welcome, tycoon`, {
+            description: `Your first factory is online. Start claiming.`,
+            ...toastOpts,
+          });
+          break;
+        default:
+          if (busy.action) {
+            toast.success(`Transaction confirmed`, toastOpts);
+          }
+      }
+
       refetch();
       refetchPlayer();
       setBusy({ step: null, action: null });
       tx.reset();
     }
-  }, [tx, refetch, refetchPlayer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx.isSuccess]);
 
   // Surface tx errors as toasts
   useEffect(() => {
