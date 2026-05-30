@@ -140,6 +140,9 @@
   --color-stage-5: var(--stage-5-mech);
   --color-stage-6: var(--stage-6-bonsai);
 
+  /* Editorial display font — Instrument Serif (GIC-style) */
+  --font-serif: "Instrument Serif", "GT Sectra", "Times New Roman", Georgia, serif;
+
   /* macOS standard radii */
   --radius-sm: calc(var(--radius) - 4px);  /* 6px */
   --radius-md: calc(var(--radius) - 2px);  /* 8px */
@@ -183,6 +186,34 @@
 }
 
 @layer utilities {
+  /* Editorial serif utility — Instrument Serif w/ optical scaling */
+  .font-serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+  .font-serif-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* GIC-style editorial small caps eyebrow */
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: oklch(0.628 0.008 286);
+  }
+
+  /* Hairline rule for editorial section dividers */
+  .editorial-rule {
+    height: 1px;
+    background: oklch(1 0 0 / 0.08);
+  }
+
   /* ===== Vibrancy / Glassmorphism ===== */
 
   /* Standard vibrancy — header, sticky bars */

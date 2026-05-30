@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Spotlight } from "@/components/motion/spotlight";
 import { Sparkles as SparkleParticles } from "@/components/motion/sparkles";
 import { BackgroundBeams } from "@/components/motion/background-beams";
+import { StagePanorama } from "@/components/illustration/stage-panorama";
 import { STAGE_LIST } from "@/lib/stages";
 import { useWalletModal } from "@/lib/wallet-modal-store";
 import { useFirstVisitWalletPrompt } from "@/hooks/use-first-visit-wallet-prompt";
@@ -69,33 +70,43 @@ export default function HomeRoute() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-xs text-muted-foreground backdrop-blur"
+            className="eyebrow mb-6 inline-flex items-center gap-2"
           >
             <Zap className="size-3 text-mac-blue" />
-            Built on Base · Gas sponsored by Paymaster
+            Idle Tycoon · Built on Base
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-balance text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl"
+            className="font-serif text-balance text-6xl leading-[0.95] sm:text-7xl md:text-[88px]"
           >
-            From <span className="text-mac-blue">Base</span> to{" "}
-            <span className="bg-gradient-to-r from-stage-3 via-stage-4 to-stage-5 bg-clip-text text-transparent">
+            From Base to{" "}
+            <span className="font-serif-italic bg-gradient-to-r from-mac-blue via-stage-4 to-stage-5 bg-clip-text text-transparent">
               Tycoon
             </span>
+            .
           </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="editorial-rule mt-8 w-24 origin-center"
+          />
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-5 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg"
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="mt-8 max-w-xl text-pretty text-[15px] leading-relaxed text-muted-foreground sm:text-base"
           >
             Build idle factories across six themed industries — lumber, café,
-            candy, crystal, mech, bonsai. Every onchain action sponsored. No
-            seed phrase, no signup, no friction.
+            candy, crystal, mech, bonsai. Every onchain action sponsored.
+            <span className="font-serif-italic text-foreground/80">
+              {" "}No seed phrase. No signup. No friction.
+            </span>
           </motion.p>
 
           <motion.div
@@ -118,19 +129,23 @@ export default function HomeRoute() {
       </section>
 
       {/* Smart Wallet education */}
-      <section className="relative mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-10 text-center">
-          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-mac-blue/30 bg-mac-blue/10 px-3 py-1 text-[11px] font-medium text-mac-blue">
-            <Sparkles className="size-3" />
+      <section className="relative mx-auto max-w-6xl px-4 py-20">
+        <div className="mb-12 text-center">
+          <div className="eyebrow mb-4 inline-flex items-center gap-2">
+            <Sparkles className="size-3 text-mac-blue" />
             Why Base Account
           </div>
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Smart wallets, smarter gameplay.
+          <h2 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-6xl">
+            Smart wallets,{" "}
+            <span className="font-serif-italic text-mac-blue">
+              smarter gameplay
+            </span>
+            .
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-[15px] text-muted-foreground">
+          <div className="editorial-rule mx-auto mt-6 w-16" />
+          <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
             Base Tycoon runs best on Base Account — a smart contract wallet
-            that unlocks features regular EOAs can't touch. Here's why it
-            matters.
+            that unlocks features regular EOAs can&apos;t touch.
           </p>
         </div>
 
@@ -198,16 +213,33 @@ export default function HomeRoute() {
       </section>
 
       {/* Six stages preview */}
-      <section className="relative mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Six industries. One empire.
+      <section className="relative mx-auto max-w-6xl px-4 py-20">
+        <div className="mb-12 text-center">
+          <div className="eyebrow mb-4 inline-flex items-center gap-2">
+            <Layers className="size-3 text-mac-blue" />
+            Six Industries
+          </div>
+          <h2 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-6xl">
+            Six industries.{" "}
+            <span className="font-serif-italic">One empire</span>.
           </h2>
-          <p className="mt-3 text-muted-foreground">
+          <div className="editorial-rule mx-auto mt-6 w-16" />
+          <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
             Master each stage to unlock the next. 48 resources, 8 steps per
             stage.
           </p>
         </div>
+
+        {/* Editorial panorama */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7 }}
+          className="mb-10 overflow-hidden rounded-[12px] border border-white/[0.06] bg-card/30 backdrop-blur"
+        >
+          <StagePanorama className="h-auto w-full" />
+        </motion.div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {STAGE_LIST.map((s, i) => (
@@ -260,18 +292,27 @@ export default function HomeRoute() {
       </section>
 
       {/* CTA strip */}
-      <section className="relative mx-auto max-w-6xl px-4 py-20">
+      <section className="relative mx-auto max-w-6xl px-4 py-24">
         <Card className="relative overflow-hidden border-mac-blue/20 bg-gradient-to-br from-mac-blue/10 via-card to-card">
           <SparkleParticles count={20} color="oklch(0.7 0.18 258)" />
-          <CardContent className="relative flex flex-col items-center gap-5 p-10 text-center sm:p-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Ready to climb the leaderboard?
+          <CardContent className="relative flex flex-col items-center gap-6 p-12 text-center sm:p-20">
+            <div className="eyebrow inline-flex items-center gap-2">
+              <Sparkles className="size-3 text-mac-blue" />
+              The Climb Begins
+            </div>
+            <h2 className="font-serif text-balance text-4xl leading-[1.05] sm:text-5xl md:text-6xl">
+              Ready to climb the{" "}
+              <span className="font-serif-italic text-mac-blue">
+                leaderboard
+              </span>
+              ?
             </h2>
-            <p className="max-w-xl text-muted-foreground">
+            <div className="editorial-rule w-16" />
+            <p className="max-w-md text-[15px] leading-relaxed text-muted-foreground">
               Connect Base Account — passkey login, no seed phrase, gas
-              sponsored. You're factory-running in under 10 seconds.
+              sponsored. You&apos;re factory-running in under 10 seconds.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <Button variant="base" size="xl" onClick={openWalletModal}>
                 <Wallet />
                 Connect Wallet
