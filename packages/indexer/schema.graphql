@@ -1,0 +1,88 @@
+## Player aggregate — derived from events for leaderboard
+## Each event handler upserts this entity to keep counts current.
+type Player {
+  id: ID!  # player address
+  address: String!
+  highestStage: BigInt!
+  prestigeCount: BigInt!
+  totalClaims: BigInt!
+  totalClaimedAmount: BigInt!
+  totalUpgrades: BigInt!
+  totalBuilds: BigInt!
+  rareDrops: BigInt!
+  firstSeenAt: BigInt!  # block timestamp
+  lastActiveAt: BigInt!
+}
+
+## Raw event entities — kept for history / drilldown queries.
+type FactoryGame_BuildFinalized {
+  id: ID!
+  player: String!
+  stage: BigInt!
+  step: BigInt!
+}
+
+type FactoryGame_BuildStarted {
+  id: ID!
+  player: String!
+  stage: BigInt!
+  step: BigInt!
+  endsAt: BigInt!
+}
+
+type FactoryGame_BuilderCodeSet {
+  id: ID!
+  code: String!
+}
+
+type FactoryGame_Claimed {
+  id: ID!
+  player: String!
+  stage: BigInt!
+  step: BigInt!
+  amount: BigInt!
+}
+
+type FactoryGame_DropRolled {
+  id: ID!
+  player: String!
+  nftId: BigInt!
+  rarity: BigInt!
+  stage: BigInt!
+}
+
+type FactoryGame_OwnershipTransferred {
+  id: ID!
+  previousOwner: String!
+  newOwner: String!
+}
+
+type FactoryGame_Paused {
+  id: ID!
+  account: String!
+}
+
+type FactoryGame_Prestiged {
+  id: ID!
+  player: String!
+  newPrestigeCount: BigInt!
+}
+
+type FactoryGame_StageUnlocked {
+  id: ID!
+  player: String!
+  stage: BigInt!
+}
+
+type FactoryGame_Unpaused {
+  id: ID!
+  account: String!
+}
+
+type FactoryGame_Upgraded {
+  id: ID!
+  player: String!
+  stage: BigInt!
+  step: BigInt!
+  newLevel: BigInt!
+}

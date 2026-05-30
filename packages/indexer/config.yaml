@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: base-tycoon-indexer
+chains:
+- id: 84532
+  start_block: 42111674
+  contracts:
+  - name: FactoryGame
+    address:
+    - "0x1D993B8826a902eaB9CC6AB4B0E1EA2DaF462d9B"
+    events:
+    - event: BuildFinalized(address indexed player, uint8 stage, uint8 step)
+    - event: BuildStarted(address indexed player, uint8 stage, uint8 step, uint64 endsAt)
+    - event: BuilderCodeSet(bytes32 code)
+    - event: Claimed(address indexed player, uint8 stage, uint8 step, uint256 amount)
+    - event: DropRolled(address indexed player, uint256 indexed nftId, uint8 rarity, uint8 stage)
+    - event: OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
+    - event: Paused(address account)
+    - event: Prestiged(address indexed player, uint64 newPrestigeCount)
+    - event: StageUnlocked(address indexed player, uint8 stage)
+    - event: Unpaused(address account)
+    - event: Upgraded(address indexed player, uint8 stage, uint8 step, uint8 newLevel)
