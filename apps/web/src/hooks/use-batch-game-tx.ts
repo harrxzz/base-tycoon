@@ -3,6 +3,8 @@ import {
   useWaitForCallsStatus,
   useAccount,
 } from "wagmi";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { encodeFunctionData } from "viem";
 import { baseSepolia } from "wagmi/chains";
 import { CONTRACTS, FACTORY_GAME_ABI } from "@/lib/contracts";
@@ -44,6 +46,7 @@ const paymasterCapabilities = PAYMASTER_URL
  */
 export function useBatchGameTx() {
   const { address } = useAccount();
+  const queryClient = useQueryClient();
   const {
     sendCalls,
     sendCallsAsync,
@@ -60,6 +63,14 @@ export function useBatchGameTx() {
   } = useWaitForCallsStatus({
     id: data?.id,
   });
+
+  // Invalidate all wagmi reads when batch confirms.
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ["readContract"] });
+      queryClient.invalidateQueries({ queryKey: ["readContracts"] });
+    }
+  }, [isSuccess, queryClient]);
 
   const sendBatch = (actions: BatchAction[]) => {
     if (!address) throw new Error("No connected account");

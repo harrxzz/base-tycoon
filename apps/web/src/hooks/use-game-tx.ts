@@ -3,12 +3,15 @@ import {
   useWaitForTransactionReceipt,
   useAccount,
 } from "wagmi";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { CONTRACTS, FACTORY_GAME_ABI } from "@/lib/contracts";
 import type { StageId, Step } from "@/lib/stages";
 
 /** Single hook for every onchain action. */
 export function useGameTx() {
   const { address } = useAccount();
+  const queryClient = useQueryClient();
   const {
     writeContractAsync,
     data: hash,
@@ -19,6 +22,15 @@ export function useGameTx() {
   const { isLoading: isMining, isSuccess } = useWaitForTransactionReceipt({
     hash,
   });
+
+  // Invalidate all wagmi reads when tx confirms — buildings, balances,
+  // pending production, player stats all get fresh data automatically.
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ["readContract"] });
+      queryClient.invalidateQueries({ queryKey: ["readContracts"] });
+    }
+  }, [isSuccess, queryClient]);
 
   const call = (functionName: string, args?: readonly unknown[]) =>
     writeContractAsync({
