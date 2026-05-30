@@ -18,9 +18,29 @@ export type BatchAction =
   | { fn: "rollDrop"; args: [] };
 
 /**
+ * Paymaster capabilities — sponsors gas via Coinbase CDP.
+ * Only applied when VITE_PAYMASTER_URL is set; smart wallets that don't
+ * support `paymasterService` capability will silently ignore it.
+ *
+ * Set VITE_PAYMASTER_URL to your CDP Paymaster RPC endpoint:
+ *   https://api.developer.coinbase.com/rpc/v1/base-sepolia/<API_KEY>
+ */
+const PAYMASTER_URL = import.meta.env.VITE_PAYMASTER_URL as string | undefined;
+
+const paymasterCapabilities = PAYMASTER_URL
+  ? {
+      paymasterService: {
+        url: PAYMASTER_URL,
+      },
+    }
+  : undefined;
+
+/**
  * Batched onchain actions via EIP-5792 useSendCalls.
  * Smart wallets execute all calls in a single atomic UserOp (one popup, one tx).
  * Up to ~30 calls per UserOp depending on bundler limits.
+ *
+ * Gas is sponsored by CDP Paymaster when VITE_PAYMASTER_URL is configured.
  */
 export function useBatchGameTx() {
   const { address } = useAccount();
@@ -57,6 +77,7 @@ export function useBatchGameTx() {
     sendCalls({
       calls,
       chainId: baseSepolia.id,
+      capabilities: paymasterCapabilities,
     });
   };
 
@@ -76,6 +97,7 @@ export function useBatchGameTx() {
     return sendCallsAsync({
       calls,
       chainId: baseSepolia.id,
+      capabilities: paymasterCapabilities,
     });
   };
 
@@ -89,5 +111,7 @@ export function useBatchGameTx() {
     isSuccess,
     error,
     reset,
+    /** True when paymaster is configured (gas sponsored). */
+    sponsored: Boolean(PAYMASTER_URL),
   };
 }
