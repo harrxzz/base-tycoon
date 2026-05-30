@@ -22,9 +22,9 @@ packages/contracts/      Foundry contracts (Resources, RareDrops, FactoryGame)
 
 | Contract | Address |
 | --- | --- |
-| Resources (ERC-1155) | `0xF8CdE874383c97CACAC993dE344103336dF10477` |
-| RareDrops (ERC-721)  | `0x4a27Be07308CE89aa347dc3e9cbbF21f832f3073` |
-| FactoryGame          | `0x116aB9E41d88468C4feBE3C03341EC4FE7b636b4` |
+| Resources (ERC-1155) | `0x9407425515E2F7644b0bb7B5B64F20057e33c155` |
+| RareDrops (ERC-721)  | `0x2bb211838F3333b8F3DB6DC96AA9898A843f231b` |
+| FactoryGame          | `0x1D993B8826a902eaB9CC6AB4B0E1EA2DaF462d9B` |
 
 ## Develop
 
