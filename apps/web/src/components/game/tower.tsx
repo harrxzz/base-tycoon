@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Hammer, Loader2, Zap, ArrowUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CoinPopOverlay } from "@/components/game/coin-pop-overlay";
 import { cn } from "@/lib/utils";
 import type { StageDef, Step } from "@/lib/stages";
 import type { BuildingState } from "@/hooks/use-player";
@@ -164,7 +165,8 @@ export function Tower({
                 </div>
 
                 {/* Right: balance + pending */}
-                <div className="text-right">
+                <div className="relative text-right">
+                  <CoinPopOverlay balance={owned} />
                   <p className="font-mono text-[15px] font-semibold tracking-tight">
                     {fmt(owned)}
                   </p>
