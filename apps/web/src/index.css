@@ -319,4 +319,305 @@
   .animate-float-y {
     animation: float-y 3.5s ease-in-out infinite;
   }
+
+  /* ─── Building Sprite Animations ─── */
+
+  /* Hammer swing for construction */
+  @keyframes hammer {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-25deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-15deg); }
+  }
+  .animate-hammer {
+    animation: hammer 0.8s ease-in-out infinite;
+    transform-origin: bottom right;
+  }
+
+  /* Sawmill blade vibration */
+  @keyframes saw {
+    0%, 100% { transform: rotate(0deg) translateX(0); }
+    25% { transform: rotate(-5deg) translateX(-1px); }
+    50% { transform: rotate(0deg) translateX(0); }
+    75% { transform: rotate(5deg) translateX(1px); }
+  }
+  .animate-saw {
+    animation: saw 0.4s ease-in-out infinite;
+  }
+
+  /* Leaf/branch sway */
+  @keyframes sway {
+    0%, 100% { transform: rotate(0deg); }
+    33% { transform: rotate(8deg); }
+    66% { transform: rotate(-6deg); }
+  }
+  .animate-sway {
+    animation: sway 2.5s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  /* Soft bounce (stacking) */
+  @keyframes bounce-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+  .animate-bounce-soft {
+    animation: bounce-soft 1.5s ease-in-out infinite;
+  }
+
+  /* Sparkle twinkle */
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+  .animate-sparkle {
+    animation: sparkle 1.2s ease-in-out infinite;
+  }
+
+  /* Slow rotation (gears, grinder) */
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-rotate-slow {
+    animation: rotate-slow 4s linear infinite;
+  }
+
+  /* Blink (indicator lights) */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.1; }
+  }
+  .animate-blink {
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  .animate-blink-delay {
+    animation: blink 1.5s ease-in-out 0.75s infinite;
+  }
+
+  /* Golden glow pulse */
+  @keyframes glow-gold {
+    0%, 100% { filter: drop-shadow(0 0 2px rgba(255, 214, 10, 0.3)); }
+    50% { filter: drop-shadow(0 0 8px rgba(255, 214, 10, 0.7)); }
+  }
+  .animate-glow-gold {
+    animation: glow-gold 2s ease-in-out infinite;
+  }
+
+  /* Pink glow */
+  @keyframes glow-pink {
+    0%, 100% { filter: drop-shadow(0 0 2px rgba(255, 55, 95, 0.3)); }
+    50% { filter: drop-shadow(0 0 8px rgba(255, 55, 95, 0.6)); }
+  }
+  .animate-glow-pink {
+    animation: glow-pink 2s ease-in-out infinite;
+  }
+
+  /* Green glow */
+  @keyframes glow-green {
+    0%, 100% { filter: drop-shadow(0 0 2px rgba(48, 209, 88, 0.3)); }
+    50% { filter: drop-shadow(0 0 8px rgba(48, 209, 88, 0.6)); }
+  }
+  .animate-glow-green {
+    animation: glow-green 2s ease-in-out infinite;
+  }
+
+  /* Steam rising */
+  @keyframes steam {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    40% { opacity: 0.7; }
+    100% { opacity: 0; transform: translateY(-10px) scale(1.2); }
+  }
+  .animate-steam {
+    animation: steam 2s ease-out infinite;
+  }
+
+  /* Pour drip */
+  @keyframes pour {
+    0%, 100% { transform: translateY(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(6px); opacity: 0; }
+  }
+  .animate-pour {
+    animation: pour 1.8s ease-in infinite;
+  }
+
+  /* Bubble float */
+  @keyframes bubble-1 {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    30% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-12px) scale(1); }
+  }
+  @keyframes bubble-2 {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    30% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-10px) scale(0.8); }
+  }
+  .animate-bubble-1 {
+    animation: bubble-1 2.2s ease-out infinite;
+  }
+  .animate-bubble-2 {
+    animation: bubble-2 2.2s ease-out 0.6s infinite;
+  }
+
+  /* Lollipop spin (slow) */
+  .animate-spin-slow {
+    animation: rotate-slow 6s linear infinite;
+  }
+
+  /* Chocolate melt drip */
+  @keyframes melt {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(2px); opacity: 0.8; }
+  }
+  .animate-melt {
+    animation: melt 2s ease-in-out infinite;
+  }
+
+  /* Gummy squish */
+  @keyframes squish {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    30% { transform: scaleY(0.85) scaleX(1.1); }
+    60% { transform: scaleY(1.05) scaleX(0.95); }
+  }
+  .animate-squish {
+    animation: squish 2s ease-in-out infinite;
+  }
+
+  /* Fire flicker */
+  @keyframes flame {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+    25% { transform: translateY(-1px) scale(1.1); opacity: 1; }
+    50% { transform: translateY(-2px) scale(0.9); opacity: 0.7; }
+    75% { transform: translateY(-1px) scale(1.05); opacity: 0.9; }
+  }
+  .animate-flame {
+    animation: flame 0.6s ease-in-out infinite;
+  }
+
+  /* Pickaxe swing */
+  @keyframes pickaxe {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-30deg); }
+    40% { transform: rotate(5deg); }
+  }
+  .animate-pickaxe {
+    animation: pickaxe 1.2s ease-in-out infinite;
+    transform-origin: bottom right;
+  }
+
+  /* Crystal pulse glow */
+  @keyframes crystal-pulse {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.3); }
+  }
+  .animate-crystal-pulse {
+    animation: crystal-pulse 2s ease-in-out infinite;
+  }
+
+  /* Crystal glow aura */
+  @keyframes crystal-glow {
+    0%, 100% { filter: drop-shadow(0 0 3px rgba(168, 85, 247, 0.4)); }
+    50% { filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.8)) brightness(1.2); }
+  }
+  .animate-crystal-glow {
+    animation: crystal-glow 2.5s ease-in-out infinite;
+  }
+
+  /* Servo arm flex */
+  @keyframes servo {
+    0%, 100% { transform: rotate(0deg); }
+    30% { transform: rotate(15deg); }
+    60% { transform: rotate(-10deg); }
+  }
+  .animate-servo {
+    animation: servo 2s ease-in-out infinite;
+  }
+
+  /* Drone hover */
+  @keyframes drone {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-3px) rotate(2deg); }
+    50% { transform: translateY(-1px) rotate(-1deg); }
+    75% { transform: translateY(-4px) rotate(1deg); }
+  }
+  .animate-drone {
+    animation: drone 2.5s ease-in-out infinite;
+  }
+
+  /* Radar sweep */
+  @keyframes radar {
+    0%, 100% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .animate-radar {
+    animation: radar 3s linear infinite;
+  }
+
+  /* Titan stomping */
+  @keyframes titan {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    15% { transform: translateY(-2px) rotate(-2deg); }
+    30% { transform: translateY(0) rotate(0deg); }
+    45% { transform: translateY(-2px) rotate(2deg); }
+    60% { transform: translateY(0) rotate(0deg); }
+  }
+  .animate-titan {
+    animation: titan 1.5s ease-in-out infinite;
+  }
+
+  /* Snip (scissors) */
+  @keyframes snip {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    20% { transform: rotate(-10deg) scale(1.05); }
+    40% { transform: rotate(5deg) scale(0.95); }
+    60% { transform: rotate(-5deg) scale(1); }
+  }
+  .animate-snip {
+    animation: snip 1.8s ease-in-out infinite;
+  }
+
+  /* Grow (upward arrow) */
+  @keyframes grow {
+    0%, 100% { opacity: 0; transform: translateY(4px); }
+    50% { opacity: 1; transform: translateY(0); }
+  }
+  .animate-grow {
+    animation: grow 2s ease-in-out infinite;
+  }
+
+  /* Zen ripple */
+  @keyframes zen {
+    0%, 100% { opacity: 0.3; letter-spacing: 0; }
+    50% { opacity: 0.6; letter-spacing: 2px; }
+  }
+  .animate-zen {
+    animation: zen 3s ease-in-out infinite;
+  }
+
+  /* Orbital leaves */
+  @keyframes orbit-1 {
+    0% { transform: rotate(0deg) translateX(10px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(10px) rotate(-360deg); }
+  }
+  @keyframes orbit-2 {
+    0% { transform: rotate(180deg) translateX(8px) rotate(-180deg); }
+    100% { transform: rotate(540deg) translateX(8px) rotate(-540deg); }
+  }
+  .animate-orbit-1 {
+    animation: orbit-1 6s linear infinite;
+  }
+  .animate-orbit-2 {
+    animation: orbit-2 8s linear infinite;
+  }
+
+  /* Slow pulse (producing glow) */
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.04; }
+    50% { opacity: 0.1; }
+  }
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
 }

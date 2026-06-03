@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import { Hammer, Loader2, Zap, ArrowUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CoinPopOverlay } from "@/components/game/coin-pop-overlay";
+import { BuildingSprite, type SpriteState } from "@/components/game/building-sprite";
 import { cn } from "@/lib/utils";
-import type { StageDef, Step } from "@/lib/stages";
+import type { StageDef, StageId, Step } from "@/lib/stages";
 import type { BuildingState } from "@/hooks/use-player";
 import {
   buildCost,
@@ -79,6 +80,15 @@ export function Tower({
         const stepIsLast = step === STEPS_PER_STAGE;
         const stepIsFirst = step === 1;
 
+        // Determine sprite state
+        const spriteState: SpriteState = empty
+          ? "locked"
+          : constructing
+            ? "constructing"
+            : b.built && pend > 0n
+              ? "producing"
+              : "built";
+
         return (
           <motion.div
             key={step}
@@ -106,26 +116,15 @@ export function Tower({
               )}
 
               <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3">
-                {/* Emoji square */}
-                <div
+                {/* Building sprite */}
+                <BuildingSprite
+                  stageId={stage.id as StageId}
+                  step={step}
+                  state={spriteState}
                   className={cn(
-                    "grid size-11 place-items-center rounded-[10px] text-2xl transition-all",
-                    b.built
-                      ? "bg-white/[0.05] border border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
-                      : "bg-white/[0.02] border border-white/[0.04]",
-                    b.built && pend > 0n && "animate-pulse",
+                    stage.accentClass,
                   )}
-                >
-                  <span
-                    className={cn(
-                      "transition-all",
-                      empty && "grayscale opacity-40",
-                      constructing && "animate-pulse",
-                    )}
-                  >
-                    {empty ? "🔒" : stepDef.emoji}
-                  </span>
-                </div>
+                />
 
                 {/* Center: name + status */}
                 <div className="min-w-0">
